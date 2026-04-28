@@ -34,7 +34,7 @@ export function UsersnapMigrationSection() {
           </p>
         </div>
 
-        <ol className="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-6">
+        <ol className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2">
           {migrationSteps.map((step, i) => (
             <li
               key={step.label}

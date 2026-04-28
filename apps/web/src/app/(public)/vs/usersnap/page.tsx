@@ -8,6 +8,7 @@ import { WebPageSchema } from "@/app/_features/seo/web-page-schema";
 import type { Metadata } from "next";
 import { UsersnapAlternativesSection } from "./_features/usersnap-alternatives-section";
 import { UsersnapBreadcrumb } from "./_features/usersnap-breadcrumb";
+import { UsersnapCalculatorSection } from "./_features/usersnap-calculator-section";
 import { UsersnapComparisonSection } from "./_features/usersnap-comparison-section";
 import { UsersnapCtaSection } from "./_features/usersnap-cta-section";
 import { UsersnapDeveloperFirstSection } from "./_features/usersnap-developer-first-section";
@@ -23,7 +24,6 @@ import {
   migrationSteps,
 } from "./_features/usersnap-migration-section";
 import { UsersnapPricingSection } from "./_features/usersnap-pricing-section";
-import { UsersnapRelatedComparisons } from "./_features/usersnap-related-comparisons";
 import { UsersnapWhySwitchSection } from "./_features/usersnap-why-switch-section";
 
 const pageUrl = `${APP_URL}/vs/usersnap`;
@@ -31,7 +31,7 @@ const title = `Usersnap Alternative — Open-Source & Self-Hosted | ${SITE_NAME}
 const description =
   "Open-source, self-hosted, and free to start. FasterFixes gives dev teams visual bug reports with full technical context — no per-seat pricing, no vendor lock-in. Compare features and pricing.";
 const datePublished = "2026-04-27T00:00:00.000Z";
-const dateModified = "2026-04-27T00:00:00.000Z";
+const dateModified = "2026-04-28T00:00:00.000Z";
 
 export const metadata: Metadata = {
   title: {
@@ -70,8 +70,9 @@ export default function Page() {
     <div>
       <UsersnapBreadcrumb />
       <UsersnapHero />
-      <UsersnapFitSection />
       <UsersnapWhySwitchSection />
+      <UsersnapFitSection />
+      <UsersnapCalculatorSection />
       <UsersnapHonestTakeSection />
       <UsersnapAlternativesSection />
       <UsersnapDeveloperFirstSection />
@@ -79,7 +80,6 @@ export default function Page() {
       <UsersnapPricingSection />
       <UsersnapMigrationSection />
       <UsersnapFaqSection />
-      <UsersnapRelatedComparisons />
       <UsersnapCtaSection />
 
       <SoftwareApplicationSchema />

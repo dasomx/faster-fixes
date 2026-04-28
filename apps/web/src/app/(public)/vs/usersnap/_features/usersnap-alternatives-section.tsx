@@ -1,10 +1,13 @@
 import { CheckIcon, XIcon } from "lucide-react";
+import type { Route } from "next";
+import Link from "next/link";
 
 type Alternative = {
   name: string;
   bestFor: string;
   startingPrice: string;
   openSource: { type: "yes"; note: string } | { type: "no" };
+  href?: Route;
   highlight?: boolean;
 };
 
@@ -21,12 +24,14 @@ const alternatives: Alternative[] = [
     bestFor: "Agencies managing client QA visually",
     startingPrice: "$39/mo",
     openSource: { type: "no" },
+    href: "/vs/bugherd" as Route,
   },
   {
     name: "Marker.io",
     bestFor: "Teams already using Jira, Linear, or Asana",
     startingPrice: "$49/mo",
     openSource: { type: "no" },
+    href: "/vs/marker-io" as Route,
   },
   {
     name: "Userback",
@@ -61,7 +66,7 @@ export function UsersnapAlternativesSection() {
           </h2>
           <p className="text-muted-foreground mt-4 text-lg">
             Not every team needs the same thing. Here is how the main
-            alternatives stack up — including FasterFixes.
+            alternatives stack up.
           </p>
         </div>
 
@@ -69,28 +74,16 @@ export function UsersnapAlternativesSection() {
           <table className="w-full min-w-[640px] border-collapse">
             <thead>
               <tr className="border-b">
-                <th
-                  scope="col"
-                  className="p-4 text-left text-sm font-semibold"
-                >
+                <th scope="col" className="p-4 text-left text-sm font-semibold">
                   Tool
                 </th>
-                <th
-                  scope="col"
-                  className="p-4 text-left text-sm font-semibold"
-                >
+                <th scope="col" className="p-4 text-left text-sm font-semibold">
                   Best for
                 </th>
-                <th
-                  scope="col"
-                  className="p-4 text-left text-sm font-semibold"
-                >
+                <th scope="col" className="p-4 text-left text-sm font-semibold">
                   Starting price
                 </th>
-                <th
-                  scope="col"
-                  className="p-4 text-left text-sm font-semibold"
-                >
+                <th scope="col" className="p-4 text-left text-sm font-semibold">
                   Open source
                 </th>
               </tr>
@@ -107,7 +100,16 @@ export function UsersnapAlternativesSection() {
                     scope="row"
                     className="p-4 text-left align-top text-sm font-semibold"
                   >
-                    {row.name}
+                    {row.href ? (
+                      <Link
+                        href={row.href}
+                        className="text-foreground underline underline-offset-4 hover:no-underline"
+                      >
+                        {row.name}
+                      </Link>
+                    ) : (
+                      row.name
+                    )}
                   </th>
                   <td className="text-muted-foreground p-4 align-top text-sm">
                     {row.bestFor}
