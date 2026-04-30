@@ -11,6 +11,7 @@ import { WebSiteSchema } from "@/app/_features/seo/website-schema";
 import type { Metadata } from "next";
 
 import { BeforeAfterSection } from "./_features/before-after-section";
+import { ComparisonsSection } from "./_features/comparisons-section";
 import { FaqSection, faqs } from "./_features/faq-section";
 import { FinalCtaSection } from "./_features/final-cta-section";
 import { HeroSection } from "./_features/hero/hero-section";
@@ -63,6 +64,7 @@ export default function Page() {
       <BeforeAfterSection />
       <FaqSection />
       <FinalCtaSection />
+      <ComparisonsSection />
 
       <FaqSchema faqs={faqs} />
       <OrganizationSchema />
