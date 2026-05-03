@@ -13,6 +13,7 @@ export type {
   CreateFeedbackResponse,
   UpdateFeedbackResponse,
   ApiErrorResponse,
+  FeedbackClient,
 } from "./types.js";
 
 export {

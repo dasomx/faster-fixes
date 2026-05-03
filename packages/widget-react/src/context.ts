@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import type {
-  FasterFixesClient,
+  FeedbackClient,
   FeedbackItem,
   Labels,
   WidgetConfig,
@@ -29,7 +29,7 @@ export type ClassNames = {
 
 export type FeedbackContextValue = {
   // Core
-  client: FasterFixesClient;
+  client: FeedbackClient;
   reviewerToken: string;
   config: WidgetConfig;
 

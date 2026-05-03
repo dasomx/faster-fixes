@@ -1,6 +1,7 @@
 import type {
   CreateFeedbackData,
   CreateFeedbackResponse,
+  FeedbackClient,
   FeedbackListResponse,
   UpdateFeedbackData,
   UpdateFeedbackResponse,
@@ -13,7 +14,7 @@ export type ClientOptions = {
   apiOrigin?: string;
 };
 
-export class FasterFixesClient {
+export class FasterFixesClient implements FeedbackClient {
   private apiKey: string;
   private apiOrigin: string;
 

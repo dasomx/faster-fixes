@@ -66,3 +66,33 @@ export type ApiErrorResponse = {
   error: string;
   details?: unknown;
 };
+
+/**
+ * Common shape implemented by any feedback backend. The default
+ * implementation is `FasterFixesClient` (HTTP against the hosted API);
+ * alternative implementations can target localStorage, in-memory state,
+ * or a mock for tests.
+ */
+export interface FeedbackClient {
+  getConfig(): Promise<WidgetConfig>;
+  getFeedback(
+    reviewerToken: string,
+    url?: string,
+  ): Promise<FeedbackListResponse>;
+  createFeedback(
+    data: CreateFeedbackData,
+    reviewerToken: string,
+    screenshot?: Blob,
+  ): Promise<CreateFeedbackResponse>;
+  updateFeedback(
+    id: string,
+    data: UpdateFeedbackData,
+    reviewerToken: string,
+  ): Promise<UpdateFeedbackResponse>;
+  deleteFeedback(id: string, reviewerToken: string): Promise<void>;
+  attachScreenshot(
+    feedbackId: string,
+    screenshot: Blob,
+    reviewerToken: string,
+  ): Promise<void>;
+}
