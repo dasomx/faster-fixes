@@ -35,4 +35,4 @@ What changes because of this? What new constraints does it create?
 
 ## Status
 
-No ADRs recorded yet. They'll appear here as `/grill-with-docs` produces them.
+- [ADR-0001](./0001-marketing-demo-uses-internal-widget-core.md) — Marketing demo uses an internal widget Core, not new widget props.
