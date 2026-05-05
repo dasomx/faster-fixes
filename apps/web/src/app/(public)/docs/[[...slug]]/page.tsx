@@ -1,4 +1,5 @@
 import { APP_URL } from "@/app/_constants/app";
+import { HowToSchema } from "@/app/_features/seo/how-to-schema";
 import { source } from "@/lib/docs/source";
 import {
   DocsBody,
@@ -11,6 +12,7 @@ import { createRelativeLink } from "fumadocs-ui/mdx";
 import { getDocsMDXComponents } from "mdx-components";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { docsHowToSchemas } from "./_features/docs-how-to-schemas";
 
 export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
   const params = await props.params;
@@ -18,6 +20,8 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
   if (!page) notFound();
 
   const MDX = page.data.body;
+  const slugKey = page.slugs.join("/");
+  const howTo = docsHowToSchemas[slugKey];
 
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
@@ -39,6 +43,14 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
           })}
         />
       </DocsBody>
+
+      {howTo && (
+        <HowToSchema
+          name={howTo.name}
+          description={howTo.description}
+          steps={howTo.steps}
+        />
+      )}
     </DocsPage>
   );
 }
