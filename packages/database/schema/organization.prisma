@@ -19,6 +19,7 @@ model Organization {
     agentTokens AgentToken[]
 
     gitHubInstallations GitHubInstallation[]
+    linearInstallation  LinearInstallation?
 
     @@unique([slug])
     @@map("organization")
@@ -35,8 +36,9 @@ model Member {
     user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
     role           String       @default("member")
 
-    assignedFeedback    Feedback[]
-    gitHubInstallations GitHubInstallation[]
+    assignedFeedback             Feedback[]
+    gitHubInstallations          GitHubInstallation[]
+    linearInstallationsInstalled LinearInstallation[]
 
     @@index([organizationId])
     @@index([userId])
