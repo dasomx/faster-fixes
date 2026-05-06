@@ -15,6 +15,7 @@ const productLinks: { text: string; href: string; external?: boolean }[] = [
 
 const integrationLinks: { text: string; href: Route }[] = [
   { text: "GitHub integration", href: "/integrations/github" as Route },
+  { text: "Linear integration", href: "/integrations/linear" as Route },
 ];
 
 const alternativesLinks: { text: string; href: Route }[] = [

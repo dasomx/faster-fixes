@@ -5,6 +5,7 @@ import { isCloud } from "@/utils/environment/env";
 import { AnimatedText } from "@workspace/ui/components/animated-text";
 import { Button } from "@workspace/ui/components/button";
 import { GithubIcon } from "@workspace/ui/components/icons/github-icon";
+import { LinearIcon } from "@workspace/ui/components/icons/linear-icon";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -37,8 +38,20 @@ const integrationLinks = [
     href: "/integrations/github",
     label: "GitHub",
     description: "Auto-create issues from feedback, sync status both ways.",
+    icon: <GithubIcon className="size-4 shrink-0" />,
   },
-] satisfies { href: string; label: string; description: string }[];
+  {
+    href: "/integrations/linear",
+    label: "Linear",
+    description: "Auto-create Linear issues from feedback, sync status both ways.",
+    icon: <LinearIcon className="size-4 shrink-0" />,
+  },
+] satisfies {
+  href: string;
+  label: string;
+  description: string;
+  icon: React.ReactNode;
+}[];
 
 export async function Header() {
   const session = await auth.api.getSession({
@@ -84,16 +97,24 @@ export async function Header() {
                     Integrations
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid w-[300px] gap-1 p-2">
+                    <ul className="grid w-[320px] gap-1 p-2">
                       {integrationLinks.map((link) => (
                         <li key={link.href}>
-                          <NavigationMenuLink asChild>
+                          <NavigationMenuLink
+                            asChild
+                            className="flex-row items-start gap-3"
+                          >
                             <Link href={link.href as never}>
-                              <span className="text-sm font-medium">
-                                {link.label}
+                              <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center">
+                                {link.icon}
                               </span>
-                              <span className="text-muted-foreground line-clamp-2 text-xs leading-snug">
-                                {link.description}
+                              <span className="flex flex-col gap-1">
+                                <span className="text-sm font-medium">
+                                  {link.label}
+                                </span>
+                                <span className="text-muted-foreground line-clamp-2 text-xs leading-snug">
+                                  {link.description}
+                                </span>
                               </span>
                             </Link>
                           </NavigationMenuLink>

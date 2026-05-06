@@ -22,6 +22,12 @@ const integrations: Integration[] = [
     description:
       "Auto-create GitHub issues from feedback with screenshot, CSS selector, and React component path. Bidirectional status sync.",
   },
+  {
+    label: "Linear integration",
+    href: "/integrations/linear" as Route,
+    description:
+      "Auto-create Linear issues from feedback with full dev context. Status sync survives renamed and custom workflow states.",
+  },
 ];
 
 export function IntegrationsSection() {

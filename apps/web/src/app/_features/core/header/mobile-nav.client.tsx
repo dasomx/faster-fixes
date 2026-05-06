@@ -13,7 +13,12 @@ import Link from "next/link";
 import { useState } from "react";
 
 type NavLink = { href: string; label: string };
-type IntegrationLink = { href: string; label: string; description: string };
+type IntegrationLink = {
+  href: string;
+  label: string;
+  description: string;
+  icon?: React.ReactNode;
+};
 
 export function MobileNav({
   links,
@@ -57,9 +62,14 @@ export function MobileNav({
                 <Link
                   key={link.href}
                   href={link.href as never}
-                  className="text-foreground hover:bg-accent rounded-md px-3 py-2 text-sm transition-colors"
+                  className="text-foreground hover:bg-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors"
                   onClick={close}
                 >
+                  {link.icon && (
+                    <span className="flex size-4 shrink-0 items-center justify-center">
+                      {link.icon}
+                    </span>
+                  )}
                   {link.label}
                 </Link>
               ))}
