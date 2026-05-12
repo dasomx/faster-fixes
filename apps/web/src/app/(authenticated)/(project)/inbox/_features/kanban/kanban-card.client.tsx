@@ -1,15 +1,15 @@
 "use client";
 
 import { useDraggable } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@workspace/ui/components/avatar";
 import { Checkbox } from "@workspace/ui/components/checkbox";
-import { formatDistanceToNow } from "date-fns";
 import { GithubIcon } from "@workspace/ui/components/icons/github-icon";
+import { cn } from "@workspace/ui/lib/utils";
+import { formatDistanceToNow } from "date-fns";
 import { GripVertical } from "lucide-react";
 import type { GetFeedbackOutput } from "../get-feedback.trpc.query";
 
@@ -32,34 +32,39 @@ function formatPageUrl(url: string) {
   }
 }
 
-export function KanbanCard({
+type KanbanCardViewProps = {
+  feedback: FeedbackItem;
+  isSelected: boolean;
+  selectionMode: boolean;
+  isOverlay?: boolean;
+  isDragging?: boolean;
+  dragHandle?: React.ReactNode;
+  onToggleSelect?: (id: string) => void;
+  onSelect?: (id: string) => void;
+};
+
+// Pure presentational card. Used as draggable source and inside DragOverlay.
+function KanbanCardView({
   feedback,
   isSelected,
   selectionMode,
+  isOverlay,
+  isDragging,
+  dragHandle,
   onToggleSelect,
   onSelect,
-}: KanbanCardProps) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: feedback.id,
-      data: { feedback },
-    });
-
-  const style = transform
-    ? {
-        transform: CSS.Transform.toString(transform),
-        zIndex: isDragging ? 50 : undefined,
-        opacity: isDragging ? 0.5 : undefined,
-      }
-    : undefined;
-
+}: KanbanCardViewProps) {
   return (
     <div
-      ref={setNodeRef}
-      style={style}
-      className="group bg-card border-border flex cursor-pointer gap-2 rounded-lg border p-3 transition duration-300 hover:shadow-sm"
+      className={cn(
+        "group bg-card border-border flex cursor-pointer gap-2 rounded-lg border p-3 transition-shadow hover:shadow-sm",
+        isOverlay && "cursor-grabbing shadow-lg",
+        // Source stays in flow but invisible; DragOverlay shows the moving copy.
+        isDragging && "invisible",
+      )}
       onClick={() => {
-        if (!isDragging) onSelect(feedback.id);
+        if (isOverlay) return;
+        onSelect?.(feedback.id);
       }}
     >
       {selectionMode && (
@@ -69,7 +74,7 @@ export function KanbanCard({
         >
           <Checkbox
             checked={isSelected}
-            onCheckedChange={() => onToggleSelect(feedback.id)}
+            onCheckedChange={() => onToggleSelect?.(feedback.id)}
           />
         </div>
       )}
@@ -109,13 +114,65 @@ export function KanbanCard({
         </div>
       </div>
 
-      <div
-        className="text-muted-foreground hidden shrink-0 cursor-grab items-center opacity-0 transition-opacity group-hover:opacity-100 lg:flex"
-        {...listeners}
-        {...attributes}
-      >
-        <GripVertical className="size-4" />
-      </div>
+      {dragHandle}
     </div>
+  );
+}
+
+export function KanbanCard({
+  feedback,
+  isSelected,
+  selectionMode,
+  onToggleSelect,
+  onSelect,
+}: KanbanCardProps) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: feedback.id,
+    data: { feedback },
+  });
+
+  const handle = (
+    <div
+      className="text-muted-foreground hidden shrink-0 cursor-grab items-center opacity-0 transition-opacity group-hover:opacity-100 lg:flex"
+      {...listeners}
+      {...attributes}
+    >
+      <GripVertical className="size-4" />
+    </div>
+  );
+
+  return (
+    <div ref={setNodeRef}>
+      <KanbanCardView
+        feedback={feedback}
+        isSelected={isSelected}
+        selectionMode={selectionMode}
+        isDragging={isDragging}
+        dragHandle={handle}
+        onToggleSelect={onToggleSelect}
+        onSelect={onSelect}
+      />
+    </div>
+  );
+}
+
+type KanbanCardOverlayProps = {
+  feedback: FeedbackItem;
+  isSelected: boolean;
+  selectionMode: boolean;
+};
+
+export function KanbanCardOverlay({
+  feedback,
+  isSelected,
+  selectionMode,
+}: KanbanCardOverlayProps) {
+  return (
+    <KanbanCardView
+      feedback={feedback}
+      isSelected={isSelected}
+      selectionMode={selectionMode}
+      isOverlay
+    />
   );
 }

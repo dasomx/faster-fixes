@@ -2,9 +2,11 @@
 
 import { useFeedbackMutations } from "@/app/(authenticated)/(project)/inbox/_features/use-feedback-mutations";
 import {
-  closestCenter,
+  closestCorners,
   DndContext,
   type DragEndEvent,
+  DragOverlay,
+  type DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -13,6 +15,7 @@ import {
 import * as React from "react";
 import { BulkActionToolbar } from "../actions-toolbar/bulk-action-toolbar.client";
 import type { GetFeedbackOutput } from "../get-feedback.trpc.query";
+import { KanbanCardOverlay } from "./kanban-card.client";
 import { KanbanColumnBody, KanbanColumnHeader } from "./kanban-column.client";
 import { KanbanMobile } from "./kanban-mobile.client";
 
@@ -58,10 +61,12 @@ export function KanbanBoard({
 }: KanbanBoardProps) {
   const { updateStatus, bulkUpdateStatus } = useFeedbackMutations();
   const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
+  const [activeId, setActiveId] = React.useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: { distance: 8 },
+      // Slightly higher distance so a quick click never starts a drag.
+      activationConstraint: { distance: 6 },
     }),
     useSensor(KeyboardSensor),
   );
@@ -102,19 +107,31 @@ export function KanbanBoard({
     />
   );
 
+  function handleDragStart(event: DragStartEvent) {
+    setActiveId(event.active.id as string);
+  }
+
   function handleDragEnd(event: DragEndEvent) {
+    setActiveId(null);
     const { active, over } = event;
     if (!over) return;
 
     const feedbackId = active.id as string;
     const newStatus = over.id as string;
 
-    // Find the current status of the dragged item
     const item = feedback.find((f) => f.id === feedbackId);
     if (!item || item.status === newStatus) return;
 
     updateStatus(feedbackId, newStatus);
   }
+
+  function handleDragCancel() {
+    setActiveId(null);
+  }
+
+  const activeFeedback = activeId
+    ? (feedback.find((f) => f.id === activeId) ?? null)
+    : null;
 
   function handleToggleSelect(id: string) {
     setSelectedIds((prev) => {
@@ -186,8 +203,10 @@ export function KanbanBoard({
       {/* Desktop: columns with DnD */}
       <DndContext
         sensors={sensors}
-        collisionDetection={closestCenter}
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
       >
         <div className="hidden gap-4 lg:grid lg:grid-cols-3">
           {COLUMNS.map((col) => (
@@ -201,6 +220,17 @@ export function KanbanBoard({
             />
           ))}
         </div>
+        {/* dropAnimation=null avoids the overlay sliding back to the source
+            slot when the item has actually moved to another column. */}
+        <DragOverlay dropAnimation={null}>
+          {activeFeedback ? (
+            <KanbanCardOverlay
+              feedback={activeFeedback}
+              isSelected={selectedIds.has(activeFeedback.id)}
+              selectionMode={selectedIds.size > 0}
+            />
+          ) : null}
+        </DragOverlay>
       </DndContext>
     </div>
   );
