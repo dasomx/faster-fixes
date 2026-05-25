@@ -1,3 +1,6 @@
+import { FAQ } from "@/app/_features/mdx/faq";
+import { HowTo } from "@/app/_features/mdx/how-to";
+import { YoutubeEmbed } from "@/app/_features/mdx/youtube-embed";
 import {
   Table,
   TableBody,
@@ -31,6 +34,9 @@ export function getContentMDXComponents(
     tr: (props) => <TableRow {...props} />,
     th: (props) => <TableHead {...props} />,
     td: (props) => <TableCell {...props} />,
+    FAQ,
+    HowTo,
+    YoutubeEmbed,
     ...components,
   };
 }

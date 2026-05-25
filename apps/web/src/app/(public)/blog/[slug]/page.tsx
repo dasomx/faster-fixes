@@ -1,6 +1,10 @@
 import { APP_URL } from "@/app/_constants/app";
 import { AUTHOR } from "@/app/_constants/author";
-import { SITE_NAME } from "@/app/_constants/seo";
+import {
+  PUBLISHER_LOGO,
+  SITE_LANGUAGE,
+  SITE_NAME,
+} from "@/app/_constants/seo";
 import { MdxLink } from "@/app/_features/mdx/mdx-link";
 import { BreadcrumbSchema } from "@/app/_features/seo/breadcrumb-schema";
 import { blogSource } from "@/lib/blog/source";
@@ -95,8 +99,17 @@ export default async function BlogPostPage({
     datePublished: page.data.date,
     dateModified: page.data.updatedAt ?? page.data.date,
     image: ogUrl,
+    inLanguage: SITE_LANGUAGE,
+    mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
+    ...(page.data.tags && page.data.tags.length > 0
+      ? { articleSection: page.data.tags[0] }
+      : {}),
+    ...(page.data.keywords && page.data.keywords.length > 0
+      ? { keywords: page.data.keywords.join(", ") }
+      : {}),
     author: {
       "@type": "Person",
+      "@id": AUTHOR.id,
       name: AUTHOR.name,
       url: AUTHOR.website,
     },
@@ -104,6 +117,12 @@ export default async function BlogPostPage({
       "@type": "Organization",
       name: SITE_NAME,
       url: APP_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${APP_URL}${PUBLISHER_LOGO.url}`,
+        width: PUBLISHER_LOGO.width,
+        height: PUBLISHER_LOGO.height,
+      },
     },
   };
 

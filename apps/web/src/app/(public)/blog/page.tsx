@@ -1,8 +1,10 @@
 import { APP_URL } from "@/app/_constants/app";
-import { SITE_NAME } from "@/app/_constants/seo";
+import { SITE_LANGUAGE, SITE_NAME } from "@/app/_constants/seo";
+import { BreadcrumbSchema } from "@/app/_features/seo/breadcrumb-schema";
 import { blogSource } from "@/lib/blog/source";
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { Blog, WithContext } from "schema-dts";
 
 const pageUrl = `${APP_URL}/blog`;
 const title = `Blog | ${SITE_NAME}`;
@@ -29,6 +31,20 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
 });
 
+const blogJsonLd: WithContext<Blog> = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: `${SITE_NAME} Blog`,
+  description,
+  url: pageUrl,
+  inLanguage: SITE_LANGUAGE,
+  publisher: {
+    "@type": "Organization",
+    name: SITE_NAME,
+    url: APP_URL,
+  },
+};
+
 export default function BlogPage() {
   const posts = blogSource
     .getPages()
@@ -40,6 +56,16 @@ export default function BlogPage() {
 
   return (
     <section className="py-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: SITE_NAME, url: APP_URL },
+          { name: "Blog", url: pageUrl },
+        ]}
+      />
       <div className="container mx-auto px-5 md:px-0">
         <h1 className="text-4xl font-bold tracking-tight">Blog</h1>
         <p className="text-muted-foreground mt-2">
