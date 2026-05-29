@@ -36,6 +36,27 @@ export type FeedbackListResponse = {
   feedback: FeedbackItem[];
 };
 
+export type ConsoleLevel = "log" | "info" | "warn" | "error" | "debug";
+
+export type ConsoleEntry = {
+  level: ConsoleLevel;
+  message: string;
+  timestamp: number;
+};
+
+export type NetworkEntry = {
+  method: string;
+  url: string;
+  status: number;
+  duration: number;
+  timestamp: number;
+};
+
+export type DiagnosticTrail = {
+  console: ConsoleEntry[];
+  network: NetworkEntry[];
+};
+
 export type CreateFeedbackData = {
   comment: string;
   pageUrl: string;
@@ -48,6 +69,7 @@ export type CreateFeedbackData = {
   viewportWidth?: number;
   viewportHeight?: number;
   metadata?: Record<string, unknown>;
+  diagnosticTrail?: DiagnosticTrail;
 };
 
 export type UpdateFeedbackData = {

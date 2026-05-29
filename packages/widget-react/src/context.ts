@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
 import type {
+  DiagnosticTrail,
   FeedbackClient,
   FeedbackItem,
   Labels,
@@ -43,6 +44,7 @@ export type FeedbackContextValue = {
   // Feedback data
   feedbackItems: FeedbackItem[];
   refreshFeedback: () => Promise<void>;
+  getDiagnosticTrail: () => DiagnosticTrail | undefined;
 
   // Selection state
   selectedElement: Element | null;

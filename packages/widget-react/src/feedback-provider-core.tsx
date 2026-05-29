@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
+  createDiagnosticsRecorder,
+  DEFAULT_API_ORIGIN,
   DEFAULT_LABELS,
   DEFAULT_WIDGET_COLOR,
   DEFAULT_WIDGET_POSITION,
   resolveElement,
 } from "@fasterfixes/core";
 import type {
+  DiagnosticsRecorder,
   FeedbackClient,
   FeedbackItem,
   Labels,
@@ -33,6 +36,8 @@ export type FeedbackProviderCoreProps = {
   position?: WidgetPosition;
   classNames?: Partial<ClassNames>;
   labels?: Partial<Labels>;
+  captureDiagnostics?: boolean;
+  apiOrigin?: string;
   children: React.ReactNode;
 };
 
@@ -54,6 +59,8 @@ export function FeedbackProviderCore({
   position,
   classNames: customClassNames,
   labels: customLabels,
+  captureDiagnostics = true,
+  apiOrigin = DEFAULT_API_ORIGIN,
   children,
 }: FeedbackProviderCoreProps) {
   const [mode, setMode] = useState<WidgetMode>("idle");
@@ -82,6 +89,7 @@ export function FeedbackProviderCore({
   const screenshotCaptureRef = useRef<Promise<Blob | null> | null>(null);
   const pendingFeedbackHandled = useRef(false);
   const portalCleanupRef = useRef<(() => void) | null>(null);
+  const recorderRef = useRef<DiagnosticsRecorder | null>(null);
 
   const effectiveColor = color ?? DEFAULT_WIDGET_COLOR;
   const effectivePosition = position ?? DEFAULT_WIDGET_POSITION;
@@ -102,11 +110,32 @@ export function FeedbackProviderCore({
     }
   }, [client, reviewerToken]);
 
+  // Snapshot the recorder's ring buffers at submit time; undefined when capture
+  // is disabled or the recorder has not started.
+  const getDiagnosticTrail = useCallback(
+    () => recorderRef.current?.snapshot(),
+    [],
+  );
+
   // The portal mounts to document.body, which is unavailable during SSR.
   // Defer all DOM-touching render until after hydration.
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Diagnostic Trail: instrument console + network for the lifetime of the
+  // widget. Gated by captureDiagnostics so an opted-out site never patches
+  // globals. Starts at mount — activity before hydration is not captured.
+  useEffect(() => {
+    if (!captureDiagnostics || typeof window === "undefined") return;
+    const recorder = createDiagnosticsRecorder({ apiOrigin });
+    recorder.start();
+    recorderRef.current = recorder;
+    return () => {
+      recorder.stop();
+      recorderRef.current = null;
+    };
+  }, [captureDiagnostics, apiOrigin]);
 
   // Initial feedback load
   useEffect(() => {
@@ -299,6 +328,7 @@ export function FeedbackProviderCore({
     hide,
     feedbackItems,
     refreshFeedback,
+    getDiagnosticTrail,
     selectedElement,
     setSelectedElement,
     clickCoords,

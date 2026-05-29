@@ -16,6 +16,7 @@ import { CopyFeedbackMarkdown } from "./copy-feedback-markdown.client";
 import { ScreenshotDialog } from "./screenshot-dialog.client";
 import { StatusSelect } from "./status-select.client";
 import { TrackersSection } from "./trackers-section.client";
+import { ViewDiagnosticsDialog } from "./view-diagnostics-dialog.client";
 
 type FeedbackItem = GetFeedbackOutput[number];
 
@@ -167,6 +168,19 @@ export function FeedbackDetailPanel({
               </div>
             </>
           )}
+
+          <Separator />
+
+          {/* Diagnostics */}
+          <div>
+            <h4 className="text-muted-foreground mb-2 text-xs font-medium uppercase">
+              Diagnostics
+            </h4>
+            <ViewDiagnosticsDialog
+              projectId={projectId}
+              feedbackId={feedback.id}
+            />
+          </div>
 
           <Separator />
 

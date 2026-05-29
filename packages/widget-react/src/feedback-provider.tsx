@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  DEFAULT_API_ORIGIN,
   FasterFixesClient,
   resolveReviewerToken,
 } from "@fasterfixes/core";
@@ -18,6 +19,9 @@ type FeedbackProviderProps = {
   position?: WidgetPosition;
   classNames?: Partial<ClassNames>;
   labels?: Partial<Labels>;
+  // Capture a Diagnostic Trail (console + network) with each feedback. Code-managed,
+  // not a dashboard setting; set false to opt a site out of capture entirely.
+  captureDiagnostics?: boolean;
   children: React.ReactNode;
 };
 
@@ -28,6 +32,7 @@ export function FeedbackProvider({
   position,
   classNames,
   labels,
+  captureDiagnostics = true,
   children,
 }: FeedbackProviderProps) {
   const [reviewerToken, setReviewerToken] = useState<string | null>(null);
@@ -73,6 +78,8 @@ export function FeedbackProvider({
       position={position}
       classNames={classNames}
       labels={labels}
+      captureDiagnostics={captureDiagnostics}
+      apiOrigin={apiOrigin ?? DEFAULT_API_ORIGIN}
     >
       {children}
     </FeedbackProviderCore>

@@ -50,3 +50,34 @@ export type Labels = typeof DEFAULT_LABELS;
 
 export const STORAGE_KEY_TOKEN = "ff_reviewer_token";
 export const URL_PARAM_TOKEN = "ff_token";
+
+// Diagnostic Trail (console + network capture) bounds and redaction denylist.
+// Independent ring per stream; oldest entries drop once full.
+export const DIAGNOSTICS_MAX_ENTRIES = 50;
+export const DIAGNOSTICS_MAX_MESSAGE_BYTES = 2048;
+
+// Param names whose *values* are redacted from captured network URLs. Compared
+// after lowercasing and stripping `_`/`-`, so `access_token` matches here.
+export const DIAGNOSTICS_REDACT_PARAMS = [
+  "token",
+  "accesstoken",
+  "refreshtoken",
+  "idtoken",
+  "key",
+  "apikey",
+  "secret",
+  "clientsecret",
+  "password",
+  "passwd",
+  "pwd",
+  "auth",
+  "authorization",
+  "bearer",
+  "session",
+  "sessionid",
+  "sid",
+  "signature",
+  "sig",
+  "email",
+  "jwt",
+] as const;

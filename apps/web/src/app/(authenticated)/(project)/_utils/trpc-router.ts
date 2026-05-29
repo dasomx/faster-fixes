@@ -9,6 +9,7 @@ import { bulkHardDeleteFeedback } from "../inbox/_features/archive/bulk-hard-del
 import { getArchivedFeedback } from "../inbox/_features/archive/get-archived-feedback.trpc.query";
 import { hardDeleteFeedback } from "../inbox/_features/archive/hard-delete-feedback.trpc.mutation";
 import { getDistinctPageUrls } from "../inbox/_features/filters/get-distinct-page-urls.trpc.query";
+import { getFeedbackDiagnostics } from "../inbox/_features/feedback-panel/get-feedback-diagnostics.trpc.query";
 import { getFeedback } from "../inbox/_features/get-feedback.trpc.query";
 import { createReviewer } from "../reviewers/_features/create/create-reviewer.trpc.mutation";
 import { deleteReviewer } from "../reviewers/_features/delete/delete-reviewer.trpc.mutation";
@@ -51,6 +52,7 @@ export const projectsRouter = router({
     list: getFeedback,
     listArchived: getArchivedFeedback,
     distinctPageUrls: getDistinctPageUrls,
+    getDiagnostics: getFeedbackDiagnostics,
     updateStatus: updateFeedbackStatus,
     updateAssignee: updateFeedbackAssignee,
     bulkUpdateStatus: bulkUpdateFeedbackStatus,

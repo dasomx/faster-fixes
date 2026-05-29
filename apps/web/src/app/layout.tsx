@@ -6,17 +6,13 @@ import "@workspace/ui/globals.css";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { DM_Sans, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 import { StopImpersonateButton } from "./_features/auth/stop-impersonate-button/stop-impersonate-button.client";
 import { ConsentProvider } from "./_features/c15t/consent-provider";
 
-const fontSans2 = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
 const fontSans = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -84,6 +80,7 @@ export default function RootLayout({
                   apiOrigin={process.env.NEXT_PUBLIC_FF_API_ORIGIN}
                   color="var(--primary)"
                   position="bottom-left"
+                  captureDiagnostics={true}
                 >
                   <RootProvider>{children}</RootProvider>
                 </FeedbackProvider>

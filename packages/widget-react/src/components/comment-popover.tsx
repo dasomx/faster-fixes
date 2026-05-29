@@ -35,6 +35,7 @@ export function CommentPopover() {
     setClickCoords,
     setScreenshotBlob,
     refreshFeedback,
+    getDiagnosticTrail,
   } = useFeedbackContext();
 
   const [comment, setComment] = useState("");
@@ -117,6 +118,8 @@ export function CommentPopover() {
       metadata = nextMetadata;
     }
 
+    const diagnosticTrail = getDiagnosticTrail();
+
     try {
       const created = await client.createFeedback(
         {
@@ -126,6 +129,7 @@ export function CommentPopover() {
           clickX: clickCoords?.x,
           clickY: clickCoords?.y,
           metadata,
+          diagnosticTrail,
           ...browserInfo,
         },
         reviewerToken,

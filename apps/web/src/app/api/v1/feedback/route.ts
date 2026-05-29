@@ -13,6 +13,26 @@ import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+const ConsoleEntrySchema = z.object({
+  level: z.enum(["log", "info", "warn", "error", "debug"]),
+  message: z.string(),
+  timestamp: z.number(),
+});
+
+const NetworkEntrySchema = z.object({
+  method: z.string(),
+  url: z.string(),
+  status: z.number(),
+  duration: z.number(),
+  timestamp: z.number(),
+});
+
+// Defensive caps above the widget's 50/stream bound — reject pathological payloads.
+const DiagnosticTrailSchema = z.object({
+  console: z.array(ConsoleEntrySchema).max(200),
+  network: z.array(NetworkEntrySchema).max(200),
+});
+
 const CreateFeedbackSchema = z.object({
   comment: z.string().trim().min(1),
   pageUrl: z.string().url(),
@@ -25,6 +45,7 @@ const CreateFeedbackSchema = z.object({
   viewportWidth: z.number().int().optional(),
   viewportHeight: z.number().int().optional(),
   metadata: z.record(z.string(), z.any()).optional(),
+  diagnosticTrail: DiagnosticTrailSchema.optional(),
 });
 
 const ALLOWED_SCREENSHOT_TYPES = ["image/png", "image/jpeg", "image/webp"];
@@ -199,6 +220,7 @@ export async function POST(req: NextRequest) {
       viewportWidth: data.viewportWidth,
       viewportHeight: data.viewportHeight,
       metadata: data.metadata,
+      diagnosticTrail: data.diagnosticTrail,
       screenshotId,
     },
     include: {
@@ -268,6 +290,8 @@ export async function GET(req: NextRequest) {
       ...(url ? { pageUrl: url } : {}),
     },
     orderBy: { createdAt: "desc" },
+    // Keep the heavy Diagnostic Trail out of the widget's hot read path.
+    omit: { diagnosticTrail: true },
     include: {
       reviewer: { select: { id: true, name: true } },
       screenshot: { select: { key: true, provider: true, bucket: true } },

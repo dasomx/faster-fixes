@@ -80,6 +80,11 @@ model Feedback {
 
     metadata Json?
 
+    // Diagnostic Trail: console + network snapshot captured by the widget at
+    // submission. Read lazily by the dashboard modal only; never selected on
+    // the widget read path (kept out of the hot getFeedback query).
+    diagnosticTrail Json?
+
     screenshotId String?
     screenshot   Asset?  @relation("FeedbackScreenshot", fields: [screenshotId], references: [id], onDelete: SetNull)
 

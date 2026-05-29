@@ -14,6 +14,10 @@ export type {
   UpdateFeedbackResponse,
   ApiErrorResponse,
   FeedbackClient,
+  ConsoleLevel,
+  ConsoleEntry,
+  NetworkEntry,
+  DiagnosticTrail,
 } from "./types.js";
 
 export {
@@ -26,8 +30,18 @@ export {
   DEFAULT_LABELS,
   STORAGE_KEY_TOKEN,
   URL_PARAM_TOKEN,
+  DIAGNOSTICS_MAX_ENTRIES,
+  DIAGNOSTICS_MAX_MESSAGE_BYTES,
+  DIAGNOSTICS_REDACT_PARAMS,
 } from "./constants.js";
 export type { Labels } from "./constants.js";
+
+export { createDiagnosticsRecorder } from "./diagnostics/recorder.js";
+export type {
+  DiagnosticsRecorder,
+  DiagnosticsRecorderOptions,
+} from "./diagnostics/recorder.js";
+export { redactUrl } from "./diagnostics/redact.js";
 
 export { resolveReviewerToken } from "./utils/token.js";
 export { generateSelector, generateSelectors, resolveElement } from "./utils/selector.js";
