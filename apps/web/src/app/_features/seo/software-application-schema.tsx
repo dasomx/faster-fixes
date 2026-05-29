@@ -48,7 +48,7 @@ export function SoftwareApplicationSchema() {
     },
     featureList: [
       "Visual feedback widget for websites",
-      "Automatic context capture (screenshot, URL, DOM selector, React component tree)",
+      "Automatic context capture (screenshot, URL, DOM selector, React component tree, console logs, network requests)",
       "Structured markdown bug reports for AI coding agents",
       "MCP server integration for Claude Code, Cursor, Windsurf",
       "GitHub issue sync",

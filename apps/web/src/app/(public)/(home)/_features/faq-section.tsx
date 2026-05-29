@@ -28,7 +28,7 @@ export const faqs: {
   {
     question: "What technical context does it capture?",
     answer:
-      "Screenshot, page URL, DOM selector, element description, React component tree (when available), browser name and version, viewport dimensions, and timestamp. All captured automatically when the client clicks.",
+      "Screenshot, page URL, DOM selector, element description, React component tree (when available), browser name and version, viewport dimensions, console logs, network requests, and timestamp. All captured automatically when the client clicks.",
   },
   {
     question: "What is the MCP server?",

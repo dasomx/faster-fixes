@@ -14,6 +14,7 @@ The widget runs in the reviewer's browser. When they click an element:
 - The React component tree is extracted (dev builds)
 - Browser metadata is collected (name, version, OS, viewport)
 - Click coordinates are recorded
+- Recent console logs and network requests are captured (the Diagnostic Trail)
 
 All data is sent to the Faster Fixes API as a multipart form upload.
 
@@ -35,7 +36,7 @@ Feedback can be consumed two ways:
 ```
 Reviewer clicks element on website
         ↓
-Widget captures context (screenshot, selector, component tree, browser info)
+Widget captures context (screenshot, selector, component tree, browser info, console & network logs)
         ↓
 Feedback submitted to Faster Fixes API
         ↓
