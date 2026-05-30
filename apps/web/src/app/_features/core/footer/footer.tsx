@@ -55,6 +55,22 @@ export function Footer() {
             <div className="mt-8 flex justify-center sm:justify-start">
               <GitHubStarsButton />
             </div>
+
+            <div className="mt-4 flex justify-center sm:justify-start md:mt-8">
+              <a
+                href="https://twelve.tools"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element -- external badge served by Twelve Tools */}
+                <img
+                  src="https://twelve.tools/badge0-dark.svg"
+                  alt="Featured on Twelve Tools"
+                  width={200}
+                  height={54}
+                />
+              </a>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
