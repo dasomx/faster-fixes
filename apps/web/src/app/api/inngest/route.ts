@@ -2,6 +2,7 @@ import { inngest } from "@/server/inngest";
 import { createGitHubIssue } from "@/server/inngest/create-github-issue";
 import { createLinearIssue } from "@/server/inngest/create-linear-issue";
 import { handleLinearOAuthRevoked } from "@/server/inngest/handle-linear-oauth-revoked";
+import { sendWelcomeEmail } from "@/server/inngest/send-welcome-email";
 import { syncFeedbackStatusToGitHub } from "@/server/inngest/sync-feedback-status-to-github";
 import { syncFeedbackStatusToLinear } from "@/server/inngest/sync-feedback-status-to-linear";
 import { syncGitHubIssueStatus } from "@/server/inngest/sync-github-issue-status";
@@ -21,5 +22,6 @@ export const { GET, POST, PUT } = serve({
     syncLinearIssueStatus,
     syncFeedbackStatusToLinear,
     handleLinearOAuthRevoked,
+    sendWelcomeEmail,
   ],
 });

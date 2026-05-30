@@ -1,6 +1,7 @@
 import { mailer } from "@/lib/mailer/client";
 import { SENDER_EMAIL } from "@/lib/mailer/constants";
 import { VerifyEmail } from "@/lib/mailer/templates/verify-email";
+import { inngest } from "@/server/inngest";
 import { render } from "@react-email/components";
 import { prisma } from "@workspace/db";
 import type { BetterAuthOptions } from "better-auth";
@@ -10,9 +11,16 @@ export const emailVerification: NonNullable<
 > = {
   sendOnSignUp: true,
   autoSignInAfterVerification: true,
-  afterEmailVerification: async () => {
+  afterEmailVerification: async (user) => {
     // The middleware will automatically redirect to onboarding since the user
     // will have autoSignInAfterVerification=true but onboardingCompleted=false
+
+    // Hand off the welcome email to Inngest so a mailer outage can't fail
+    // verification, and delivery is retried independently.
+    await inngest.send({
+      name: "user/email-verified",
+      data: { userId: user.id },
+    });
   },
   sendVerificationEmail: async ({ user, url }, ctx) => {
     const dbUser = await prisma.user.findUnique({
