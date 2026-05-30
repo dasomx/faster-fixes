@@ -38,3 +38,5 @@ What changes because of this? What new constraints does it create?
 - [ADR-0001](./0001-marketing-demo-uses-internal-widget-core.md) — Marketing demo uses an internal widget Core, not new widget props.
 - [ADR-0002](./0002-linear-oauth-uses-actor-app.md) — Linear OAuth uses `actor=app` for stable, app-scoped attribution.
 - [ADR-0003](./0003-encrypt-tracker-tokens-at-rest.md) — Encrypt Tracker tokens at rest despite Better Auth's plaintext precedent.
+- [ADR-0004](./0004-programmatic-blog-images.md) — Programmatic blog images.
+- [ADR-0005](./0005-widget-identity-public-id-origin-auth.md) — Widget identifies its Project by a public ID, secured by allowed origins + reviewer token, not a secret API key.

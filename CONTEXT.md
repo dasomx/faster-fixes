@@ -18,6 +18,21 @@ _Avoid_: Reporter, Submitter, User.
 A Faster Fixes container scoped to one website (one widget install). Holds Feedback, settings, and at most one tracker link per integration.
 _Avoid_: Site, App, Workspace.
 
+### Identity & access
+
+**Project public ID**:
+The public, unguessable identifier for a Project (`proj_` + 96-bit random), embedded in the widget so submissions route to the right Project inbox. Public by design — it carries no secret and is safe to ship in client code.
+_Avoid_: API key (the widget surface has no secret key), Client secret.
+
+**Allowed origins**:
+The web origins a Project's widget may call the API from: the Project's registered **domain** plus any **subdomain** of it, and localhost for local development. Matched against the browser-set `Origin` — the real security boundary for widget requests. Deliberately **not** a free-form domain allowlist: a Project is one website and `projects` is the billed unit, so letting one Project span unrelated domains would bypass per-website pricing.
+
+**Reviewer token**:
+The per-Reviewer secret that authorizes reading and submitting Feedback. Created in the dashboard, delivered to a Reviewer via URL param or localStorage. This — not the Project public ID — is the gate on Feedback access.
+
+**Agent token**:
+The organization-scoped secret (`ff_agent_`) for the agent/MCP API. The only genuine secret credential in the system; stored hashed and revocable.
+
 ### Feedback lifecycle
 
 **Status**:
@@ -81,3 +96,4 @@ The fixed-size in-memory store the Widget fills from page load; oldest entries d
 - **"Closed" vs "Archived"** — historically used interchangeably. Resolved: the canonical user-facing term is **Archived**. The DB literal `"closed"` is retained for now to avoid a migration; rename is deferred.
 - **"Issue"** — refers exclusively to a tracker-side artifact (GitHub Issue, Linear Issue). Internal app records are **Feedback**, never "issues".
 - **"logs"** — used loosely for the captured browser data. Resolved: the canonical term is **Diagnostic Trail** (console + network), distinct from server-side logs.
+- **"API key"** — the widget historically embedded an `apiKey` stored like a secret (SHA-256 hash, last-4 shown, "regenerate" flow). Resolved: the widget surface has **no secret**. It embeds the public **Project public ID**, secured by the **allowed origins** (domain + subdomains) + **Reviewer token**. Genuine secrets exist only on the agent surface (**Agent token**). The widget `apiKey` is being removed.
