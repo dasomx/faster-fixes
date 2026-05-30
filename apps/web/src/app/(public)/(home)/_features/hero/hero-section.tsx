@@ -12,7 +12,7 @@ const objectionRemovers = ["2-minute setup", "No credit card required"];
 export function HeroSection() {
   return (
     <HeroDotBackground>
-      <section className="w-full py-20 md:py-24">
+      <section className="w-full py-20 md:pt-24 md:pb-16">
         <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-4 lg:grid-cols-2 lg:gap-16">
           {/* Left column: copy */}
           <div className="flex flex-col items-start">

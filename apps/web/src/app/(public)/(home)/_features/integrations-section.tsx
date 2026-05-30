@@ -5,6 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
+import { GithubIcon } from "@workspace/ui/components/icons/github-icon";
+import { LinearIcon } from "@workspace/ui/components/icons/linear-icon";
 import { ArrowRightIcon } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
@@ -13,6 +15,7 @@ type Integration = {
   label: string;
   href: Route;
   description: string;
+  icon: React.ReactNode;
 };
 
 const integrations: Integration[] = [
@@ -21,12 +24,14 @@ const integrations: Integration[] = [
     href: "/integrations/github" as Route,
     description:
       "Auto-create GitHub issues from feedback with screenshot, CSS selector, and React component path. Bidirectional status sync.",
+    icon: <GithubIcon className="size-5 shrink-0" />,
   },
   {
     label: "Linear integration",
     href: "/integrations/linear" as Route,
     description:
       "Auto-create Linear issues from feedback with full dev context. Status sync survives renamed and custom workflow states.",
+    icon: <LinearIcon className="size-5 shrink-0" />,
   },
 ];
 
@@ -53,7 +58,10 @@ export function IntegrationsSection() {
               <Link href={item.href} className="group block h-full">
                 <Card className="hover:border-foreground bg-muted/30 h-full transition-colors">
                   <CardHeader>
-                    <CardTitle className="text-base">{item.label}</CardTitle>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      {item.icon}
+                      {item.label}
+                    </CardTitle>
                     <CardDescription className="leading-relaxed">
                       {item.description}
                     </CardDescription>
