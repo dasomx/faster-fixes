@@ -7,6 +7,7 @@ import {
 } from "@workspace/ui/components/card";
 import { GithubIcon } from "@workspace/ui/components/icons/github-icon";
 import { LinearIcon } from "@workspace/ui/components/icons/linear-icon";
+import { SlackIcon } from "@workspace/ui/components/icons/slack-icon";
 import { ArrowRightIcon } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
@@ -32,6 +33,13 @@ const integrations: Integration[] = [
     description:
       "Auto-create Linear issues from feedback with full dev context. Status sync survives renamed and custom workflow states.",
     icon: <LinearIcon className="size-5 shrink-0" />,
+  },
+  {
+    label: "Slack integration",
+    href: "/integrations/slack" as Route,
+    description:
+      "Post new feedback to a Slack channel with screenshot and status badge. The message updates in place as the status changes.",
+    icon: <SlackIcon className="size-5 shrink-0" />,
   },
 ];
 

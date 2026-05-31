@@ -6,6 +6,7 @@ import { AnimatedText } from "@workspace/ui/components/animated-text";
 import { Button } from "@workspace/ui/components/button";
 import { GithubIcon } from "@workspace/ui/components/icons/github-icon";
 import { LinearIcon } from "@workspace/ui/components/icons/linear-icon";
+import { SlackIcon } from "@workspace/ui/components/icons/slack-icon";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -45,6 +46,12 @@ const integrationLinks = [
     label: "Linear",
     description: "Auto-create Linear issues from feedback, sync status both ways.",
     icon: <LinearIcon className="size-4 shrink-0" />,
+  },
+  {
+    href: "/integrations/slack",
+    label: "Slack",
+    description: "Post new feedback to a channel; the message updates in place as status changes.",
+    icon: <SlackIcon className="size-4 shrink-0" />,
   },
 ] satisfies {
   href: string;
