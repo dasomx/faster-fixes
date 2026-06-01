@@ -25,6 +25,7 @@ export const PLAN_LIMITS = {
     organizations: 1,
     githubIntegration: false,
     linearIntegration: false,
+    slackIntegration: false,
     whiteLabel: false,
   },
   [SubscriptionPlanName.Pro]: {
@@ -34,6 +35,7 @@ export const PLAN_LIMITS = {
     organizations: Infinity,
     githubIntegration: true,
     linearIntegration: true,
+    slackIntegration: true,
     whiteLabel: true,
   },
   [SubscriptionPlanName.Agency]: {
@@ -43,6 +45,7 @@ export const PLAN_LIMITS = {
     organizations: Infinity,
     githubIntegration: true,
     linearIntegration: true,
+    slackIntegration: true,
     whiteLabel: true,
   },
 } as const;
@@ -129,6 +132,11 @@ export const PLAN_FEATURES = {
     {
       id: "linear_integration",
       label: "Linear integration",
+      highlighted: false,
+    },
+    {
+      id: "slack_integration",
+      label: "Slack notifications",
       highlighted: false,
     },
     {

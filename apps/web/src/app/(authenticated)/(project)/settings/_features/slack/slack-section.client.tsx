@@ -1,5 +1,6 @@
 "use client";
 
+import { usePlanGate } from "@/app/_features/subscription/use-plan-gate";
 import { useActiveOrganization } from "@/lib/auth";
 import { useTRPC } from "@/lib/trpc/trpc-client";
 import { matchQueryStatus } from "@/utils/tanstack-query/match-query-status";
@@ -16,6 +17,20 @@ type SlackSectionProps = {
 
 export function SlackSection({ projectId }: SlackSectionProps) {
   const { data: activeOrg } = useActiveOrganization();
+  const { canAccess } = usePlanGate();
+
+  if (!canAccess("slackIntegration")) {
+    return (
+      <div className="flex flex-col gap-2">
+        <p className="text-muted-foreground text-sm">
+          Slack integration is available on paid plans.
+        </p>
+        <Button className="w-fit" asChild>
+          <a href="/account/billing">Upgrade your plan</a>
+        </Button>
+      </div>
+    );
+  }
 
   return <SlackSectionInner orgId={activeOrg?.id} projectId={projectId} />;
 }

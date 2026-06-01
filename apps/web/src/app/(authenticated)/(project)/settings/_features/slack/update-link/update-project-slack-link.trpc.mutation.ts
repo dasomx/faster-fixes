@@ -1,10 +1,12 @@
 "use server";
 
-import { protectedProcedure } from "@/server/trpc/trpc";
+import { enforceFeature } from "@/server/trpc/middlewares/enforce-feature";
+import { planAwareProcedure } from "@/server/trpc/middlewares/with-plan-context";
 import { TRPCError, inferProcedureOutput } from "@trpc/server";
 import { UpdateProjectSlackLinkSchema } from "./update-project-slack-link.schema";
 
-export const updateProjectSlackLink = protectedProcedure
+export const updateProjectSlackLink = planAwareProcedure
+  .use(enforceFeature("slackIntegration"))
   .input(UpdateProjectSlackLinkSchema)
   .mutation(async ({ input, ctx }) => {
     const { prisma, session } = ctx;
