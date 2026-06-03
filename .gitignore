@@ -46,7 +46,7 @@ next-env.d.ts
 findings.md
 progress.md
 task_plan.md
-_internals/
+_internal/
 
 # Skill eval workspaces
 packages/skills/*-workspace/
