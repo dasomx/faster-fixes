@@ -111,26 +111,28 @@ export async function Header() {
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[320px] gap-1 p-2">
+                      {/* Plain Link, not NavigationMenuLink: Radix's FocusGroupItem
+                          collection (nav-menu 1.2.14) drops this content's children
+                          once the list reaches 4+ items. A styled anchor renders
+                          reliably regardless of count. */}
                       {integrationLinks.map((link) => (
                         <li key={link.href}>
-                          <NavigationMenuLink
-                            asChild
-                            className="flex-row items-start gap-3"
+                          <Link
+                            href={link.href as never}
+                            className="hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring/50 flex flex-row items-start gap-3 rounded-sm p-2 outline-none transition-colors focus-visible:ring-[3px]"
                           >
-                            <Link href={link.href as never}>
-                              <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center">
-                                {link.icon}
+                            <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center">
+                              {link.icon}
+                            </span>
+                            <span className="flex flex-col gap-1">
+                              <span className="text-sm font-medium">
+                                {link.label}
                               </span>
-                              <span className="flex flex-col gap-1">
-                                <span className="text-sm font-medium">
-                                  {link.label}
-                                </span>
-                                <span className="text-muted-foreground line-clamp-2 text-xs leading-snug">
-                                  {link.description}
-                                </span>
+                              <span className="text-muted-foreground line-clamp-2 text-xs leading-snug">
+                                {link.description}
                               </span>
-                            </Link>
-                          </NavigationMenuLink>
+                            </span>
+                          </Link>
                         </li>
                       ))}
                     </ul>
