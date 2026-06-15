@@ -78,13 +78,22 @@ function ActiveSubscriptionsCardLoading() {
   return (
     <Card>
       <CardContent>
-        <div className="mb-4 flex items-baseline gap-2">
+        <div className="flex items-baseline gap-2">
           <Skeleton className="h-8 w-20" />
-          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-4 w-24" />
         </div>
+        <p className="text-muted-foreground text-xs">Active subscriptions</p>
+        <Skeleton className="mb-4 mt-1 h-4 w-28" />
+
         <div className="space-y-3 border-t pt-4">
-          <Skeleton className="size-40" />
-          <Skeleton className="size-40" />
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground text-xs">Pro</span>
+            <Skeleton className="h-5 w-16" />
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground text-xs">Agency</span>
+            <Skeleton className="h-5 w-16" />
+          </div>
         </div>
       </CardContent>
     </Card>

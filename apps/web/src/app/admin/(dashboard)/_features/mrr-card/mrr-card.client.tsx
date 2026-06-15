@@ -75,12 +75,25 @@ function MrrCardLoading() {
   return (
     <Card>
       <CardContent>
-        <div className="mb-4 flex items-baseline gap-2">
-          <Skeleton className="h-8 w-20" />
-        </div>
+        <Skeleton className="h-8 w-24" />
+        <p className="text-muted-foreground text-xs">Gross revenue</p>
+        <Skeleton className="mb-4 mt-1 h-4 w-20" />
+
         <div className="space-y-3 border-t pt-4">
-          <Skeleton className="size-40" />
-          <Skeleton className="size-40" />
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground text-xs">MRR</span>
+            <Skeleton className="h-5 w-16" />
+          </div>
+          <div>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground text-xs">ARR</span>
+              <Skeleton className="h-5 w-16" />
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground text-xs">LTV</span>
+              <Skeleton className="h-4 w-12" />
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
