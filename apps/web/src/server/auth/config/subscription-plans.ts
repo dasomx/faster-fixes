@@ -50,6 +50,19 @@ export const PLAN_LIMITS = {
   },
 } as const;
 
+/**
+ * Hourly ceilings for the agent API, per plan. This is an abuse/runaway-loop
+ * backstop, not a monetization lever — see docs/adr/0007. Numbers are set so a
+ * normal Claude Code session never hits them: Free covers a full pass over the
+ * 50-feedback cap (100 writes); Paid covers ~500 tickets/hour. Self-hosted is
+ * unlimited (the rate-limit check is skipped entirely off cloud).
+ */
+export const AGENT_API_RATE_LIMITS = {
+  [SubscriptionPlanName.Free]: { write: 120, read: 1000 },
+  [SubscriptionPlanName.Pro]: { write: 1000, read: 5000 },
+  [SubscriptionPlanName.Agency]: { write: 1000, read: 5000 },
+} as const;
+
 export type PlanLimits = (typeof PLAN_LIMITS)[SubscriptionPlanName];
 
 export type LimitableResource = {

@@ -7,6 +7,10 @@ import {
   type ResolvedAgentToken,
   resolveAgentToken,
 } from "@/server/api/resolve-agent-token";
+import { AGENT_API_RATE_LIMITS } from "@/server/auth/config/subscription-plans";
+import { resolveOrganizationPlan } from "@/server/auth/subscription";
+import { isCloud } from "@/utils/environment/env";
+import { prisma } from "@workspace/db";
 import { NextResponse } from "next/server";
 import { agentError } from "./agent-error";
 
@@ -16,6 +20,11 @@ type AgentRateLimitKey = "agent:read" | "agent:write";
  * Authenticates an agent request, checks scope, and applies rate limiting.
  * Returns the resolved token on success, or a `NextResponse` to short-circuit
  * the handler with the appropriate error.
+ *
+ * The rate limit is an abuse backstop, not authorization (see docs/adr/0007):
+ * keyed per organization (not per token — minting tokens must not multiply the
+ * budget), tiered by plan, and skipped entirely off cloud (self-hosted runs on
+ * the operator's own infra).
  */
 export async function requireAgentAuth(
   authHeader: string | null,
@@ -31,9 +40,42 @@ export async function requireAgentAuth(
     return agentError("Insufficient permissions", "FORBIDDEN", 403);
   }
 
-  const allowed = await checkRateLimit(agentToken.tokenHash, rateLimitKey);
-  if (!allowed) {
-    return agentError("Rate limit exceeded", "RATE_LIMITED", 429);
+  if (isCloud()) {
+    const plan = await resolveOrganizationPlan(
+      agentToken.organization.id,
+      prisma,
+    );
+    const kind = rateLimitKey === "agent:write" ? "write" : "read";
+    const max = AGENT_API_RATE_LIMITS[plan.planName][kind];
+
+    const result = await checkRateLimit(
+      agentToken.organization.id,
+      rateLimitKey,
+      max,
+    );
+
+    if (!result.allowed) {
+      const resetIso = new Date(result.resetAt).toISOString();
+      return agentError(
+        `Rate limit exceeded. 0 of ${result.limit} ${kind} operations remaining this hour. Retry after ${result.retryAfterSeconds} seconds (window resets at ${resetIso}).`,
+        "RATE_LIMITED",
+        429,
+        {
+          headers: {
+            "Retry-After": String(result.retryAfterSeconds),
+            "X-RateLimit-Limit": String(result.limit),
+            "X-RateLimit-Remaining": String(result.remaining),
+            "X-RateLimit-Reset": String(Math.floor(result.resetAt / 1000)),
+          },
+          extra: {
+            limit: result.limit,
+            remaining: result.remaining,
+            retryAfterSeconds: result.retryAfterSeconds,
+            resetAt: resetIso,
+          },
+        },
+      );
+    }
   }
 
   return agentToken;

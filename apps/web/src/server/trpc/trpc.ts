@@ -50,7 +50,7 @@ export const protectedProcedure = publicProcedure
     return opts.next({ ctx: { session } });
   })
   .use(async (opts) => {
-    const allowed = await checkRateLimit(opts.ctx.session.user.id, "trpc");
+    const { allowed } = await checkRateLimit(opts.ctx.session.user.id, "trpc");
     if (!allowed) {
       throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
     }
