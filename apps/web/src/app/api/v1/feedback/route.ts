@@ -3,6 +3,7 @@ import { resolveProject } from "@/server/api/resolve-project";
 import { validateOrigin } from "@/server/api/validate-origin";
 import { validateReviewer } from "@/server/api/validate-reviewer";
 import { checkResourceLimit } from "@/server/auth/subscription";
+import { createEnvGitHubIssue } from "@/server/github/create-env-github-issue";
 import { inngest } from "@/server/inngest";
 import { s3Client } from "@/server/storage";
 import { createAsset } from "@/server/storage/create-asset";
@@ -237,6 +238,10 @@ export async function POST(req: NextRequest) {
   const screenshotUrl = feedback.screenshot
     ? await getSignedAssetUrl(feedback.screenshot)
     : null;
+
+  createEnvGitHubIssue(feedback, screenshotUrl).catch((err) => {
+    console.error("[feedback] GitHub issue creation failed:", err);
+  });
 
   return NextResponse.json(
     {
