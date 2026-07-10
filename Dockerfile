@@ -9,7 +9,10 @@ COPY packages packages
 RUN NPM_TOKEN=${NPM_TOKEN:-} pnpm install --frozen-lockfile
 
 COPY apps apps
-RUN pnpm --filter @workspace/db build && pnpm --filter web build
+RUN pnpm --filter @workspace/db build \
+  && pnpm --filter @fasterfixes/core build \
+  && pnpm --filter @fasterfixes/react build \
+  && pnpm --filter web build
 
 ENV NODE_ENV=production PORT=3000
 EXPOSE 3000
