@@ -3,7 +3,7 @@
 import { useActiveProject } from "@/app/_features/project/active-project-provider.client";
 import { useActiveOrganization } from "@/lib/auth";
 import { useTRPC } from "@/lib/trpc/trpc-client";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/form/zod-resolver";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@workspace/ui/components/button";
 import {

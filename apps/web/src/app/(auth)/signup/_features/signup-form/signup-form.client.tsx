@@ -3,7 +3,7 @@
 import { SendVerificationEmailButton } from "@/app/_features/auth/send-verification-email-button/send-verification-email-button.client";
 import { useTRPC } from "@/lib/trpc/trpc-client";
 import { useMutation } from "@tanstack/react-query";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/form/zod-resolver";
 import {
   Alert,
   AlertDescription,

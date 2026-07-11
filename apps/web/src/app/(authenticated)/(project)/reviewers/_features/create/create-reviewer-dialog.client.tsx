@@ -5,7 +5,7 @@ import {
   CreateReviewerSchema,
 } from "@/app/(authenticated)/(project)/reviewers/_features/create/create-reviewer.schema";
 import { useTRPC } from "@/lib/trpc/trpc-client";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/form/zod-resolver";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@workspace/ui/components/button";
 import {

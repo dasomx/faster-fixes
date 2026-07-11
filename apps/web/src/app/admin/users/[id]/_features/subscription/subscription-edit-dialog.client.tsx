@@ -5,7 +5,7 @@ import {
   SUBSCRIPTION_PLANS,
   SubscriptionStatus,
 } from "@/server/auth/config/subscription-plans";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/form/zod-resolver";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ActionButton } from "@workspace/ui/components/action-button";
 import { Button } from "@workspace/ui/components/button";

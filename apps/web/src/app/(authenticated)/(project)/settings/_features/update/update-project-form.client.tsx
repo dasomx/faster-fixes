@@ -5,7 +5,7 @@ import {
   UpdateProjectSchema,
 } from "@/app/(authenticated)/(project)/settings/_features/update/update-project.schema";
 import { useTRPC } from "@/lib/trpc/trpc-client";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/form/zod-resolver";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Alert, AlertDescription } from "@workspace/ui/components/alert";
 import { Button } from "@workspace/ui/components/button";

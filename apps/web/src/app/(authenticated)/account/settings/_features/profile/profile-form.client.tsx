@@ -2,7 +2,7 @@
 
 import { useSession } from "@/lib/auth";
 import { useTRPC } from "@/lib/trpc/trpc-client";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/form/zod-resolver";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Alert,
